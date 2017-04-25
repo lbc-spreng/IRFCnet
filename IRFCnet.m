@@ -1,9 +1,12 @@
-function [weiadj thresholds lambda_optval] = IRFCnet(workdir, parcels, subjectID, eventName, baseName, gamma, bonf)
+function [weiadj lambda_optval PvalNet ObNet] = IRFCnet(workdir, parcels, GLMregions, subjectID, condName, baseName, gamma, bonf)
 %fmriNetFit runs the Interregional Functional Connectivity (IRFC) approach
 %and outputs a weighted adjacency matrix corresponding to the fitted
 %netowrk
 
 cd(workdir);
+
+%fix condName used to be called eventName
+eventName = condName;
 
 %get pvalue network
 PvalNet = Pnet(parcels, subjectID, eventName, baseName);
@@ -23,6 +26,6 @@ end
 %threshold pvalue network to get region states
 ObNet = PvalNet < 0.05/bonf;
 %obtain fitted adjacency matrix
-[weiadj thresholds lambda_optval] = IsingFitMatlab(ObNet, gamma);
+[weiadj lambda_optval] = IsingFitMatlab(ObNet.', GLMregions, gamma);
 
 end

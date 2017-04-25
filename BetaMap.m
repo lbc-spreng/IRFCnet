@@ -3,8 +3,8 @@ function curBetaMap = BetaMap(subID, eName, bName)
 %(string), outputs array corresponding to the event beta map corrected by
 %the baseline
 
-eBeta = load_nii([subID '/' eName]);
-bBeta = load_nii([subID '/' bName]);
+eBeta = load_nii(strcat(char(subID),'/',char(eName)));
+bBeta = load_nii(strcat(char(subID),'/',char(bName)));
 
 
 if size(size(eBeta.img),2) ~= 3

@@ -7,7 +7,7 @@ if sum(size(Parcel.img) == size(curBetaMap)) ~= 3
 end
 
 PvalCol = zeros(Parcel.TotSize, 1);
-for parc = Parcel.labels 
+for parc = Parcel.labels.' 
     pbetas = curBetaMap(Parcel.img == parc);
     %if a region has >100 voxels, randomly choose a subset
     %to keep power consistent across regions

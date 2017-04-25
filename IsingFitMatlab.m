@@ -1,19 +1,22 @@
-function [weiadj lambda_optval] = IsingFitMatlab(x, gamma, AND)
+function [weiadj lambda_optval] = IsingFitMatlab(x, GLMregions, gamma, AND)
 %Do the IsingFit function in Matlab
+%this function and the EBIC function heavily lift code from the IsingFit
+%package in R, https://cran.r-project.org/web/packages/IsingFit/IsingFit.pdf
 
 
 %if only x is given, set AND = TRUE
-if nargin < 3
+if nargin < 4
     AND = true; 
 end
 
 %save number of nodes 
 odim = size(x,2); 
 
-%do a loop over each node to ensure variance in each node
+%do a loop over each node to ensure variance in each node, and only include
+%
 NodesToAnalyze = zeros(1,odim);
 for a = 1:odim
-    res = all(x(:,a) == x(1,a)) == 0;
+    res = and(all(x(:,a) == x(1,a)) == 0, sum(a == GLMregions));
     NodesToAnalyze(a) =  res;
 end
 
@@ -46,9 +49,9 @@ end
 
 %get full version of all the output variables
 weiadj = zeros(odim); 
-weiadj(NodesToAnalyze, NodesToAnalyze) = weiadjO;
+weiadj(NodesToAnalyze==1, NodesToAnalyze==1) = weiadjO;
 lambda_optval = zeros(1, odim);
-lambda_optval(NodesToAnalyze) = lambda_optvalO;
+lambda_optval(NodesToAnalyze==1) = lambda_optvalO;
 %thresholds = zeros(1, odim);
 %thresholds(NodesToAnalyze) = thresholdsO;
 
